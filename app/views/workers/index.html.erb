@@ -97,9 +97,39 @@
                       </div>
                     </td>
                     <td>
-                      <span class="badge bg-primary text-white rounded-pill px-3 py-2">
-                        <%= worker.work_type %>
-                      </span>
+                      <% work_type = worker.work_type.downcase %>
+                      <% case work_type %>
+                      <% when 'plumber' %>
+                        <span class="badge" style="background-color: #007bff;">
+                          <i class="bi bi-wrench me-1"></i> Plumber
+                        </span>
+                      <% when 'electrician' %>
+                        <span class="badge" style="background-color: #28a745;">
+                          <i class="bi bi-lightning-charge me-1"></i> Electrician
+                        </span>
+                      <% when 'building_contractor' %>
+                        <span class="badge" style="background-color: #ffc107;">
+                          <i class="bi bi-building me-1"></i> Building Contractor
+                        </span>
+                      <% when 'mason' %>
+                        <span class="badge" style="background-color: #17a2b8;">
+                          <i class="bi bi-hammer me-1"></i> Mason
+                        </span>
+                      <% when 'labor' %>
+                        <span class="badge" style="background-color: #dc3545;">
+                          <i class="bi bi-hammer me-1"></i> Labor
+                        </span>
+                      <% when 'carpenter' %>
+                        <span class="badge" style="background-color: #6f42c1;">
+                          <i class="bi bi-tools me-1"></i> Carpenter
+                        </span>
+                      <%when 'painter'%>
+                         <span class="badge" style="background-color: #fd7e14;">
+                            <i class="bi bi-paint-bucket me-1"></i> Painter
+                         </span>
+                      <% else %>
+                        <span class="badge bg-secondary"><%= worker.work_type.titleize %></span>
+                      <% end %>
                     </td>
                     <td>
                       <div>
