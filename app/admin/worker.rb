@@ -3,7 +3,6 @@ ActiveAdmin.register Worker do
   permit_params :name, :phone_number, :country_code, :addr1, :addr2, :city,
                 :pincode, :state, :country, :email, :description, :work_type
 
-  # Customize the index page (listing)
   index do
     selectable_column
     id_column
@@ -18,7 +17,6 @@ ActiveAdmin.register Worker do
     actions
   end
 
-  # Customize the filters on the index page
   filter :name
   filter :phone_number
   filter :email
@@ -28,14 +26,12 @@ ActiveAdmin.register Worker do
   filter :work_type, as: :select, collection: Worker.work_types.keys.map { |key| [key.titleize, key] }
   filter :created_at
 
-  # Customize the form for creating/editing
   form do |f|
     f.inputs "Worker Details" do
       f.input :name
       f.input :phone_number
       f.input :country_code, input_html: { value: f.object.country_code.presence || '+91' }
       f.input :email
-      # Use enum keys instead of integer values so Rails receives "electrician" rather than "1"
       f.input :work_type, as: :select, collection: Worker.work_types.keys.map { |key| [key.titleize, key] }
       f.input :description, as: :text
     end
@@ -52,7 +48,6 @@ ActiveAdmin.register Worker do
     f.actions
   end
 
-  # Customize the show page
   show do
     attributes_table do
       row :id
@@ -75,20 +70,34 @@ ActiveAdmin.register Worker do
     end
   end
 
-  action_item :import, only: :index do
-    link_to 'Import Workers', import_admin_workers_path
+  action_item :import_csv, only: :index do
+    link_to 'Import CSV', action: 'import_csv'
   end
-  
-  collection_action :import, method: [:get, :post] do
-    if request.post?
-      if params[:file].present?
-        flash[:notice] = "Successfully imported workers."
-      else
-        flash[:error] = "Please select a file to import."
+
+  collection_action :import_csv, method: :get do
+    render 'admin/csv_import'
+  end
+
+  collection_action :upload_csv, method: :post do
+    require 'csv'
+    if params[:csv_file].present?
+      csv_file = params[:csv_file].tempfile
+      begin
+        ActiveRecord::Base.transaction do
+          CSV.foreach(csv_file, headers: true) do |row|
+            worker_params = row.to_hash.slice(
+              "name", "phone_number", "country_code", "addr1", "addr2",
+              "city", "pincode", "state", "country", "email", "description", "work_type"
+            )
+            Worker.create!(worker_params)
+          end
+        end
+        redirect_to admin_workers_path, notice: "CSV imported successfully!"
+      rescue => e
+        redirect_to admin_workers_path, alert: "Import failed: #{e.message}"
       end
-      
-      redirect_to admin_workers_path
+    else
+      redirect_to admin_workers_path, alert: "Please attach a CSV file."
     end
-  end
-  
+  end  
 end

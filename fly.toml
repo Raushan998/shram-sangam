@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for shram-sangam on 2025-03-18T23:26:43+05:30
+# fly.toml app configuration file generated for shram-sangam on 2025-03-20T15:38:27+05:30
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -8,6 +8,7 @@ primary_region = 'dfw'
 console_command = '/rails/bin/rails console'
 
 [build]
+  release_command = "bundle exec rake db:seed"
 
 [http_service]
   internal_port = 3000
@@ -29,7 +30,19 @@ console_command = '/rails/bin/rails console'
     [http_service.checks.headers]
       X-Forwarded-Proto = 'https'
 
+  [[http_service.checks]]
+    interval = '10s'
+    timeout = '2s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/up'
+    protocol = 'http'
+    tls_skip_verify = false
+
+    [http_service.checks.headers]
+      X-Forwarded-Proto = 'https'
+
 [[vm]]
-  memory = '512mb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
