@@ -1,8 +1,11 @@
 <div class="container-fluid py-4">
-  <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
+  <!-- Search Card with Light Blue Border -->
+  <div class="card shadow-sm mb-4 rounded-3 overflow-hidden" style="border: 1px solid #ADD8E6;">
     <div class="card-header bg-primary text-white py-3">
       <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0 fw-bold"><i class="bi bi-search me-2"></i>Find Workers</h4>
+        <h4 class="mb-0 fw-bold">
+          <i class="bi bi-search me-2"></i>Find Workers
+        </h4>
         <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#searchCollapse">
           <i class="bi bi-chevron-down"></i>
         </button>
@@ -10,33 +13,26 @@
     </div>
     <div class="collapse show" id="searchCollapse">
       <div class="card-body bg-light">
-        <%= search_form_for @q, url: workers_path, method: :get do |f| %>
+        <%= search_form_for @q, url: workers_path, method: :get, html: { data: { turbo_frame: 'workers' } } do |f| %>
           <div class="row g-3">
             <div class="col-md-6 col-sm-12">
               <div class="form-floating">
-                <%= f.select :work_type_eq, 
-                  Worker.pluck(:work_type).uniq.compact.sort, 
-                  { include_blank: "All Types" }, 
-                  class: "form-select shadow-sm" %>
+                <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
                 <label><i class="bi bi-briefcase me-1"></i>Work Type</label>
               </div>
             </div>
   
             <div class="col-md-6 col-sm-12">
               <div class="form-floating">
-                <%= f.select :city_eq, 
-                  Worker.pluck(:city).uniq.compact.sort, 
-                  { include_blank: "All Cities" }, 
-                  class: "form-select shadow-sm" %>
+                <%= f.select :city_eq, Worker.pluck(:city).uniq.compact.sort, { include_blank: "All Cities" }, class: "form-select shadow-sm" %>
                 <label><i class="bi bi-building me-1"></i>City</label>
               </div>
             </div>
             
             <div class="col-12 d-flex justify-content-end mt-4">
-              <%= link_to workers_path, class: "btn btn-outline-secondary me-2" do %>
+              <%= link_to workers_path, class: "btn btn-outline-secondary me-2", data: { turbo_frame: '_top' } do %>
                 <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
               <% end %>
-              
               <%= f.submit "Search", class: "btn btn-primary px-4" %>
             </div>
           </div>
@@ -45,100 +41,103 @@
     </div>
   </div>
   
-  <!-- Results Card -->
-  <div class="card shadow border-0 rounded-3 overflow-hidden">
-    <div class="card-header bg-primary text-white py-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0 fw-bold"><i class="bi bi-people me-2"></i>Workers Directory</h4>
-        <span class="badge bg-light text-dark fs-6 fw-semibold rounded-pill px-3">
-          <%= @workers.count %> workers found
-        </span>
-      </div>
-    </div>
-    
-    <% if @workers.empty? %>
-      <div class="card-body text-center py-5">
-        <div class="empty-state py-4">
-          <i class="bi bi-search text-secondary" style="font-size: 3rem;"></i>
-          <h5 class="mt-3 text-secondary">No workers match your search criteria</h5>
-          <p class="text-muted">Try adjusting your filters or <%= link_to "view all workers", workers_path %></p>
-        </div>
-      </div>
-    <% else %>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0" id="workersTable">
-            <thead class="table-light">
-              <tr>
-                <th class="ps-3">
-                  <%= sort_link(@q, :name, "Name", class: "text-decoration-none text-dark") %>
-                </th>
-                <th>
-                  <%= sort_link(@q, :work_type, "Expertise", class: "text-decoration-none text-dark") %>
-                </th>
-                <th>
-                  <%= sort_link(@q, :city, "Location", class: "text-decoration-none text-dark") %>
-                </th>
-                <th>Contact</th>
-                <th class="text-end pe-3">Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @workers.each do |worker| %>
-                <tr>
-                  <td class="ps-3">
-                    <div class="d-flex align-items-center">
-                      <div class="bg-primary text-white me-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                        <%= worker.name.first.upcase %>
-                      </div>
-                      <div>
-                        <div class="fw-semibold"><%= worker.name %></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="badge bg-primary text-white rounded-pill px-3 py-2">
-                      <%= worker.work_type %>
-                    </span>
-                  </td>
-                  <td>
-                    <div><%= worker.city %>, <%= worker.state %></div>
-                    <div class="small text-muted"><%= worker.pincode %></div>
-                  </td>
-                  <td>
-                    <div class="d-flex flex-column">
-                      <a href="tel:<%= worker.phone_number %>" class="text-decoration-none">
-                        <i class="bi bi-telephone me-1"></i><%= worker.phone_number %>
-                      </a>
-                      <a href="mailto:<%= worker.email %>" class="text-decoration-none small">
-                        <i class="bi bi-envelope me-1"></i><%= worker.email %>
-                      </a>
-                    </div>
-                  </td>
-                  <td class="text-end pe-3">
-                    <button type="button" class="btn btn-sm btn-outline-primary">
-                      <i class="bi bi-eye me-1"></i>View
-                    </button>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+  <!-- Results Card Wrapped in a Turbo Frame -->
+  <turbo-frame id="workers">
+    <div class="card shadow rounded-3 overflow-hidden" style="border: 1px solid #ADD8E6;">
+      <div class="card-header bg-primary text-white py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 fw-bold">
+            <i class="bi bi-people me-2"></i>Workers Directory
+          </h4>
+          <span class="badge bg-light text-dark fs-6 fw-semibold rounded-pill px-3">
+            <%= @workers.count %> workers found
+          </span>
         </div>
       </div>
       
-      <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-        <div class="text-muted small">
-          Showing <span class="fw-semibold"><%= @workers.count %></span> workers
+      <% if @workers.empty? %>
+        <div class="card-body text-center py-5">
+          <div class="empty-state py-4">
+            <i class="bi bi-search text-secondary" style="font-size: 3rem;"></i>
+            <h5 class="mt-3 text-secondary">No workers match your search criteria</h5>
+            <p class="text-muted">
+              Try adjusting your filters or <%= link_to "view all workers", workers_path, data: { turbo_frame: '_top' } %>
+            </p>
+          </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% else %>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="workersTable">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-3">
+                    <%= sort_link(@q, :name, "Name", class: "text-decoration-none text-dark") %>
+                  </th>
+                  <th>
+                    <%= sort_link(@q, :work_type, "Expertise", class: "text-decoration-none text-dark") %>
+                  </th>
+                  <th>
+                    <%= sort_link(@q, :city, "Location", class: "text-decoration-none text-dark") %>
+                  </th>
+                  <th>Contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @workers.each do |worker| %>
+                  <tr>
+                    <td class="ps-3">
+                      <div class="d-flex align-items-center">
+                        <div class="bg-primary text-white me-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                          <%= worker.name.first.upcase %>
+                        </div>
+                        <div class="fw-semibold">
+                          <%= worker.name %>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="badge bg-primary text-white rounded-pill px-3 py-2">
+                        <%= worker.work_type %>
+                      </span>
+                    </td>
+                    <td>
+                      <div>
+                        <i class="bi bi-geo-alt me-1"></i>
+                        <%= [worker.addr1.presence, worker.addr2.presence, worker.city.presence, worker.state.presence].compact.join(', ') %>
+                      </div>
+                      <div class="small text-muted">
+                        <%= worker.pincode %>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex flex-column">
+                        <span data-controller="worker"
+                              data-worker-phone-value="<%= worker.phone_number %>"
+                              data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
+                              class="text-decoration-none">
+                          <i class="bi bi-eye me-1"></i> Show Number
+                        </span>
+                        <% if worker.email.present? %>
+                          <a href="mailto:<%= worker.email %>" class="text-decoration-none small">
+                            <i class="bi bi-envelope me-1"></i><%= worker.email %>
+                          </a>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+          <div class="text-muted small">
+            Showing <span class="fw-semibold"><%= @workers.count %></span> workers
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </turbo-frame>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
-  });
-</script>
