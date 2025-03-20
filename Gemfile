@@ -39,7 +39,7 @@ gem "bootsnap", require: false
 gem 'ransack'
 gem 'ransack-enum'
 gem 'stimulus-rails'
-gem 'zeitwerk', '< 2.7'
+gem 'zeitwerk', '< 2.8'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
