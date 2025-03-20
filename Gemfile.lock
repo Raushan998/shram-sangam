@@ -98,10 +98,10 @@ GEM
     builder (3.3.0)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
-    countries (5.7.2)
+    countries (7.1.1)
       unaccent (~> 0.3)
-    country_select (8.0.3)
-      countries (~> 5.0)
+    country_select (10.0.1)
+      countries (> 5.0, < 8.0)
     crass (1.0.6)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
@@ -370,7 +370,7 @@ DEPENDENCIES
   activeadmin
   bootsnap
   brakeman
-  country_select (~> 8.0)
+  country_select (~> 10.0)
   cssbundling-rails (~> 1.4)
   debug
   devise
