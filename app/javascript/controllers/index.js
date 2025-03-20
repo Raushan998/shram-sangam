@@ -2,5 +2,5 @@
 import { Application } from '@hotwired/stimulus'
 import WorkerController from "./worker_controller"
 
-window.Stimulus = Application.start()
-Stimulus.register("worker", WorkerController)
+const application = Application.start()
+application.register("worker", WorkerController)
