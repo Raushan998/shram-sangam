@@ -11,7 +11,7 @@ ActiveAdmin.register Worker do
     column :city
     column :state
     column :work_type do |worker|
-      worker.work_type.titleize
+      worker.work_type&.titleize
     end
     column :created_at
     actions
@@ -42,7 +42,7 @@ ActiveAdmin.register Worker do
       f.input :city
       f.input :pincode
       f.input :state
-      f.input :country, input_html: { value: f.object.country.presence || 'India' }
+      f.input :country, as: :string, input_html: { value: f.object.country.presence || 'India' }
     end
 
     f.actions
@@ -56,7 +56,7 @@ ActiveAdmin.register Worker do
       row :country_code
       row :email
       row :work_type do |worker|
-        worker.work_type.titleize
+        worker.work_type&.titleize
       end
       row :description
       row :addr1

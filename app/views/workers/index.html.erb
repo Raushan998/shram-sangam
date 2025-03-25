@@ -1,5 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3 mb-md-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">
+      shram-sangam
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <div class="ms-auto d-flex">
+        <button class="btn btn-light text-primary fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#workerModal">
+          <i class="bi bi-person-plus-fill me-1"></i>Are you a worker?
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="modal fade" id="workerModal" tabindex="-1" aria-labelledby="workerModalLabel" aria-hidden="true" data-controller="worker">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="workerModalLabel">Join Our Workers Network</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div data-worker-target="formContainer">
+          <p class="mb-3">Enter your phone number below and we'll contact you with more information on how to join our workers network.</p>
+          <div class="form-floating mb-3">
+            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" data-worker-target="phoneInput">
+            <label for="phoneNumber"><i class="bi bi-telephone me-1"></i>Phone Number</label>
+          </div>
+          <button type="button" class="btn btn-primary w-100" data-action="click->worker#submit">
+            <i class="bi bi-check-circle me-1"></i>Submit
+          </button>
+        </div>
+        <div class="text-center py-4 d-none" data-worker-target="thankYouMessage">
+          <div class="mb-3">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-2">Thanks for believing in us!</h4>
+          <p class="mb-4">We've received your information and will contact you soon.</p>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid py-4">
-  <!-- Search Card with Light Blue Border -->
   <div class="card shadow-sm mb-4 rounded-3 overflow-hidden" style="border: 1px solid #ADD8E6;">
     <div class="card-header bg-primary text-white py-3">
       <div class="d-flex justify-content-between align-items-center">
@@ -17,7 +65,7 @@
           <div class="row g-3">
             <div class="col-md-6 col-sm-12">
               <div class="form-floating">
-                <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
+                <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort.map {|wt| [wt.titleize, wt]}, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
                 <label><i class="bi bi-briefcase me-1"></i>Work Type</label>
               </div>
             </div>
@@ -89,7 +137,7 @@
                     <td class="ps-3">
                       <div class="d-flex align-items-center">
                         <div class="bg-primary text-white me-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                          <%= worker.name.first.upcase %>
+                          <%= worker.name&.first&.upcase %>
                         </div>
                         <div class="fw-semibold">
                           <%= worker.name %>
@@ -97,7 +145,7 @@
                       </div>
                     </td>
                     <td>
-                      <% work_type = worker.work_type.downcase %>
+                      <% work_type = worker.work_type&.downcase %>
                       <% case work_type %>
                       <% when 'plumber' %>
                         <span class="badge" style="background-color: #007bff;">
@@ -128,7 +176,7 @@
                             <i class="bi bi-paint-bucket me-1"></i> Painter
                          </span>
                       <% else %>
-                        <span class="badge bg-secondary"><%= worker.work_type.titleize %></span>
+                        <span class="badge bg-secondary"><%= worker.work_type&.titleize %></span>
                       <% end %>
                     </td>
                     <td>
@@ -142,12 +190,16 @@
                     </td>
                     <td>
                       <div class="d-flex flex-column">
-                        <span data-controller="worker"
-                              data-worker-phone-value="<%= worker.phone_number %>"
-                              data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
-                              class="text-decoration-none">
-                          <i class="bi bi-eye me-1"></i> Show Number
-                        </span>
+                        <% if worker.phone_number.present? %>
+                          <span data-controller="worker"
+                                data-worker-phone-value="<%= worker.phone_number %>"
+                                data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
+                                class="text-decoration-none">
+                            <i class="bi bi-eye me-1"></i> Show Number
+                           </span>
+                        <% else %>
+                          <span>Not Available</span>
+                        <%end %>
                         <% if worker.email.present? %>
                           <a href="mailto:<%= worker.email %>" class="text-decoration-none small">
                             <i class="bi bi-envelope me-1"></i><%= worker.email %>
