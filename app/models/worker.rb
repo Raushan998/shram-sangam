@@ -9,7 +9,8 @@ class Worker < ApplicationRecord
         painter: 6, 
         civil_contractor: 7,
         tile_contractor: 8,
-        painting_contractor: 9
+        painting_contractor: 9,
+        plumbing_contractor: 10
     }
     def self.ransackable_attributes(auth_object = nil)
         ["addr1", "addr2", "city", "country", "country_code", "created_at", "description", "email", "id", "id_value", "name", "phone_number", "pincode", "state", "updated_at", "work_type"]
