@@ -48,40 +48,44 @@
 </div>
 
 <div class="container-fluid py-4">
-  <div class="card shadow-sm mb-4 rounded-3 overflow-hidden" style="border: 1px solid #ADD8E6;">
+  <div class="card shadow-sm mb-4 rounded-3 overflow-hidden border-0">
     <div class="card-header bg-primary text-white py-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0 fw-bold">
           <i class="bi bi-search me-2"></i>Find Workers
         </h4>
-        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#searchCollapse">
-          <i class="bi bi-chevron-down"></i>
+        <button class="btn btn-sm btn-light rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="true">
+          <i class="bi bi-chevron-up"></i>
         </button>
       </div>
     </div>
     <div class="collapse show" id="searchCollapse">
-      <div class="card-body bg-light">
+      <div class="card-body p-4 bg-light">
         <%= search_form_for @q, url: workers_path, method: :get, html: { data: { turbo_frame: 'workers' } } do |f| %>
-          <div class="row g-3">
-            <div class="col-md-6 col-sm-12">
+          <div class="row g-4">
+            <div class="col-lg-5 col-md-6 col-sm-12">
               <div class="form-floating">
                 <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort.map {|wt| [wt.titleize, wt]}, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
                 <label><i class="bi bi-briefcase me-1"></i>Work Type</label>
               </div>
             </div>
   
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-5 col-md-6 col-sm-12">
               <div class="form-floating">
-                <%= f.select :city_eq, Worker.pluck(:city).uniq.compact.sort, { include_blank: "All Cities" }, class: "form-select shadow-sm" %>
+                <%= f.select :city_eq, Worker.pluck(:city).uniq.compact.sort, 
+                   { include_blank: "All Cities" }, 
+                   class: "form-select shadow-sm" %>
                 <label><i class="bi bi-building me-1"></i>City</label>
               </div>
             </div>
             
-            <div class="col-12 d-flex justify-content-end mt-4">
-              <%= link_to workers_path, class: "btn btn-outline-secondary me-2", data: { turbo_frame: '_top' } do %>
+            <div class="col-lg-2 col-md-12 d-flex align-items-center justify-content-end mt-md-4 mt-lg-0">
+              <%= link_to workers_path, 
+                  class: "btn btn-outline-secondary me-2", 
+                  data: { turbo_frame: '_top' } do %>
                 <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
               <% end %>
-              <%= f.submit "Search", class: "btn btn-primary px-4" %>
+              <%= f.submit "Search", class: "btn btn-primary px-4 shadow-sm" %>
             </div>
           </div>
         <% end %>
@@ -89,15 +93,15 @@
     </div>
   </div>
   
-  <!-- Results Card Wrapped in a Turbo Frame -->
+  <!-- Enhanced Results Card using Bootstrap classes -->
   <turbo-frame id="workers">
-    <div class="card shadow rounded-3 overflow-hidden" style="border: 1px solid #ADD8E6;">
+    <div class="card shadow rounded-3 border-0">
       <div class="card-header bg-primary text-white py-3">
         <div class="d-flex justify-content-between align-items-center">
           <h4 class="mb-0 fw-bold">
             <i class="bi bi-people me-2"></i>Workers Directory
           </h4>
-          <span class="badge bg-light text-dark fs-6 fw-semibold rounded-pill px-3">
+          <span class="badge bg-light text-primary fs-6 fw-semibold px-3 shadow-sm">
             <%= @workers.count %> workers found
           </span>
         </div>
@@ -105,12 +109,17 @@
       
       <% if @workers.empty? %>
         <div class="card-body text-center py-5">
-          <div class="empty-state py-4">
-            <i class="bi bi-search text-secondary" style="font-size: 3rem;"></i>
-            <h5 class="mt-3 text-secondary">No workers match your search criteria</h5>
-            <p class="text-muted">
-              Try adjusting your filters or <%= link_to "view all workers", workers_path, data: { turbo_frame: '_top' } %>
+          <div class="py-5">
+            <div class="display-1 text-secondary mb-3">
+              <i class="bi bi-search"></i>
+            </div>
+            <h4 class="text-secondary mb-3">No workers match your search criteria</h4>
+            <p class="text-muted mb-4">
+              Try adjusting your filters or exploring other options
             </p>
+            <%= link_to "View All Workers", workers_path, 
+                class: "btn btn-primary px-4 py-2", 
+                data: { turbo_frame: '_top' } %>
           </div>
         </div>
       <% else %>
@@ -119,24 +128,29 @@
             <table class="table table-hover align-middle mb-0" id="workersTable">
               <thead class="table-light">
                 <tr>
-                  <th class="ps-3">
-                    <%= sort_link(@q, :name, "Name", class: "text-decoration-none text-dark") %>
+                  <th class="ps-4 py-3">
+                    <%= sort_link(@q, :name, "<span class='fw-semibold'>Name</span>".html_safe, 
+                        {}, { class: "text-decoration-none text-dark d-flex align-items-center" }) %>
                   </th>
-                  <th>
-                    <%= sort_link(@q, :work_type, "Expertise", class: "text-decoration-none text-dark") %>
+                  <th class="py-3">
+                    <%= sort_link(@q, :work_type, "<span class='fw-semibold'>Expertise</span>".html_safe, 
+                        {}, { class: "text-decoration-none text-dark" }) %>
                   </th>
-                  <th>
-                    <%= sort_link(@q, :city, "Location", class: "text-decoration-none text-dark") %>
+                  <th class="py-3">
+                    <%= sort_link(@q, :city, "<span class='fw-semibold'>Location</span>".html_safe, 
+                        {}, { class: "text-decoration-none text-dark" }) %>
                   </th>
-                  <th>Contact</th>
+                  <th class="py-3 pe-4">
+                    <span class="fw-semibold">Contact</span>
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="border-top-0">
                 <% @workers.each do |worker| %>
                   <tr>
-                    <td class="ps-3">
+                    <td class="ps-4">
                       <div class="d-flex align-items-center">
-                        <div class="bg-primary text-white me-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-size: 1rem;">
                           <%= worker.name&.first&.upcase %>
                         </div>
                         <div class="fw-semibold">
@@ -148,31 +162,31 @@
                       <% work_type = worker.work_type&.downcase %>
                       <% case work_type %>
                       <% when 'plumber' %>
-                        <span class="badge" style="background-color: #007bff;">
+                        <span class="badge text-bg-primary">
                           <i class="bi bi-wrench me-1"></i> Plumber
                         </span>
                       <% when 'electrician' %>
-                        <span class="badge" style="background-color: #28a745;">
+                        <span class="badge text-bg-success">
                           <i class="bi bi-lightning-charge me-1"></i> Electrician
                         </span>
                       <% when 'building_contractor' %>
-                        <span class="badge" style="background-color: #ffc107;">
+                        <span class="badge text-bg-warning text-dark">
                           <i class="bi bi-building me-1"></i> Building Contractor
                         </span>
                       <% when 'mason' %>
-                        <span class="badge" style="background-color: #17a2b8;">
+                        <span class="badge text-bg-info">
                           <i class="bi bi-hammer me-1"></i> Mason
                         </span>
                       <% when 'labor' %>
-                        <span class="badge" style="background-color: #dc3545;">
+                        <span class="badge text-bg-danger">
                           <i class="bi bi-hammer me-1"></i> Labor
                         </span>
                       <% when 'carpenter' %>
-                        <span class="badge" style="background-color: #6f42c1;">
+                        <span class="badge bg-secondary">
                           <i class="bi bi-tools me-1"></i> Carpenter
                         </span>
                       <%when 'painter'%>
-                         <span class="badge" style="background-color: #fd7e14;">
+                         <span class="badge bg-warning text-dark">
                             <i class="bi bi-paint-bucket me-1"></i> Painter
                          </span>
                       <% else %>
@@ -180,29 +194,43 @@
                       <% end %>
                     </td>
                     <td>
-                      <div>
-                        <i class="bi bi-geo-alt me-1"></i>
-                        <%= [worker.addr1.presence, worker.addr2.presence, worker.city.presence, worker.state.presence].compact.join(', ') %>
-                      </div>
-                      <div class="small text-muted">
-                        <%= worker.pincode %>
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-geo-alt text-primary me-2 mt-1"></i>
+                        <div>
+                          <div class="fw-medium">
+                            <%= worker.city.presence || "N/A" %><%= ", #{worker.state}" if worker.state.present? %>
+                          </div>
+                          <div class="small text-muted">
+                            <%= [worker.addr1.presence, worker.addr2.presence].compact.join(', ') %>
+                            <% if worker.pincode.present? %>
+                              <span class="ms-1 badge bg-light text-secondary">
+                                <%= worker.pincode %>
+                              </span>
+                            <% end %>
+                          </div>
+                        </div>
                       </div>
                     </td>
-                    <td>
+                    <td class="pe-4">
                       <div class="d-flex flex-column">
                         <% if worker.phone_number.present? %>
-                          <span data-controller="worker"
-                                data-worker-phone-value="<%= worker.phone_number %>"
-                                data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
-                                class="text-decoration-none">
+                          <!-- Fixed-width button that won't cause layout shifts -->
+                          <button data-controller="worker"
+                                  data-worker-phone-value="<%= worker.phone_number %>"
+                                  data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
+                                  class="btn btn-outline-primary btn-sm mb-2 text-start" 
+                                  style="min-width: 140px; height: 31px; overflow: hidden; white-space: nowrap;">
                             <i class="bi bi-eye me-1"></i> Show Number
-                           </span>
+                          </button>
                         <% else %>
-                          <span>Not Available</span>
-                        <%end %>
+                          <div class="text-muted small mb-2 py-1 px-2" style="min-height: 31px;">
+                            <i class="bi bi-telephone-x me-1"></i> No phone available
+                          </div>
+                        <% end %>
+                        
                         <% if worker.email.present? %>
-                          <a href="mailto:<%= worker.email %>" class="text-decoration-none small">
-                            <i class="bi bi-envelope me-1"></i><%= worker.email %>
+                          <a href="mailto:<%= worker.email %>" class="btn btn-outline-secondary btn-sm text-start text-truncate" style="max-width: 200px;">
+                            <i class="bi bi-envelope me-1"></i><span><%= worker.email %></span>
                           </a>
                         <% end %>
                       </div>
@@ -214,10 +242,15 @@
           </div>
         </div>
         
-        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-          <div class="text-muted small">
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3 px-4">
+          <div class="text-muted">
             Showing <span class="fw-semibold"><%= @workers.count %></span> workers
           </div>
+          <% if @workers.count > 10 %>
+            <button class="btn btn-sm btn-outline-primary" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+              <i class="bi bi-arrow-up me-1"></i>Back to top
+            </button>
+          <% end %>
         </div>
       <% end %>
     </div>
