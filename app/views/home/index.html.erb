@@ -1,0 +1,165 @@
+<%= render 'layouts/navbar' %>
+
+<div class="container-fluid p-0 position-relative" style="height: 45vh;">
+    <%= image_tag 'home_renovation.jpg',
+          alt: 'Local Service Workers',
+          class: 'w-100 h-100',
+          style: 'object-fit: cover;' %>
+  
+    <!-- Overlay with Text and Search Form -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white" style="background-color: rgba(0,0,0,0.4);">
+      <!-- Heading and Description -->
+      <div class="text-center mb-5 px-3">
+        <h1 class="fw-bold">Find Trusted Local Service Professionals & Businesses</h1>
+        <p class="fw-light">
+          Connect with verified professionals and established businesses for your service needs.
+          Get quotes, schedule services, and find the perfect match for your requirements.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Button positioned at the bottom of the container -->
+    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4 d-grid" style="width: 66%;">
+      <%= link_to 'Explore Local Services', workers_path, class: 'btn btn-secondary btn-lg fw-bold'%>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4">Service Providers Connected with Us</h2>
+    
+    <div class="row">
+      <!-- Service Cards and Enquiry Form -->
+      <div class="col-lg-8">
+        <div class="row g-4">
+          <!-- Construction Service Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="row g-0 h-100">
+                <div class="col-4 h-100 position-relative">
+                  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+                    <%= image_tag 'construction.jpg', alt: 'Construction Service', 
+                                style: 'width: 100%; height: 100%; object-fit: cover;' %>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Construction Services</h5>
+                    <p class="card-text small">Professional building and renovation services for all your construction needs</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carpentry Service Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="row g-0 h-100">
+                <div class="col-4 h-100 position-relative">
+                  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+                    <%= image_tag 'carpenter.jpg', alt: 'Carpentry Service', 
+                                style: 'width: 100%; height: 100%; object-fit: cover;' %>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Carpentry Services</h5>
+                    <p class="card-text small">Expert woodworking and custom furniture solution</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Painting Service Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="row g-0 h-100">
+                <div class="col-4 h-100 position-relative">
+                  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+                    <%= image_tag 'painter.jpg', alt: 'Painting Service', 
+                                style: 'width: 100%; height: 100%; object-fit: cover;' %>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Painting Services</h5>
+                    <p class="card-text small">Quality interior and exterior painting services</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Plumbing Service Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="row g-0 h-100">
+                <div class="col-4 h-100 position-relative">
+                  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+                    <%= image_tag 'plumber.jpg', alt: 'Plumbing Service', 
+                                style: 'width: 100%; height: 100%; object-fit: cover;' %>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Plumbing Services</h5>
+                    <p class="card-text small">Expert plumbing repairs and installations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Electrical Service Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="row g-0 h-100">
+                <div class="col-4 h-100 position-relative">
+                  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
+                    <%= image_tag 'electrician.jpg', alt: 'Electrical Service', 
+                                style: 'width: 100%; height: 100%; object-fit: cover;' %>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Electrical Services</h5>
+                    <p class="card-text small">Licensed electricians for all electrical needs</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Enquiry Form -->
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card shadow">
+          <div class="card-header bg-dark bg-gradient text-white">
+            <h5 class="mb-0">Send Enquiry</h5>
+          </div>
+          <div class="card-body">
+            <%= form_with model: Lead.new, url: leads_path, method: :post, local: true, data: { controller: "lead_form_handler" } do |f| %>
+              <div class="mb-3">
+                <%= f.label :name, 'Name', class: 'form-label' %>
+                <%= f.text_field :name, class: 'form-control', required: true %>
+              </div>
+              
+              <div class="mb-3">
+                <%= f.label :phone, 'Phone Number', class: 'form-label' %>
+                <%= f.telephone_field :phone_number, class: 'form-control', required: true %>
+              </div>
+              
+              <div class="mb-3">
+                <%= f.label :message, 'Message', class: 'form-label' %>
+                <%= f.text_area :message, class: 'form-control', rows: 5, required: true %>
+              </div>
+              
+              <%= f.submit 'Submit Enquiry', class: 'btn btn-transparent w-100' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
