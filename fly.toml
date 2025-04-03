@@ -4,11 +4,14 @@
 #
 
 app = 'shram-sangam'
-primary_region = 'dfw'
+primary_region = 'bom'
 console_command = '/rails/bin/rails console'
 
 [build]
   release_command = "bundle exec rake db:seed"
+
+[processes]
+  app = "bundle exec puma -b tcp://0.0.0.0:3000"
 
 [http_service]
   internal_port = 3000
