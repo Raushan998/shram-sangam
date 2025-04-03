@@ -5,45 +5,19 @@ export default class extends Controller {
   static targets = ["phoneInput", "formContainer", "thankYouMessage", "phoneDisplay"]
   
   connect() {
-    // Check if this is a phone display controller (in the worker list)
-    if (this.hasPhoneDisplayTarget) {
-      this.originalText = this.phoneDisplayTarget.textContent;
-    }
-    
-    // Initialize tooltips if needed
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    this.tooltips = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl, {
-        boundary: document.body
-      })
-    })
+    this.buttonText = this.element.querySelector('.button-text');
   }
-  
-  disconnect() {
-    if (this.tooltips) {
-      this.tooltips.forEach(tooltip => tooltip.dispose())
-    }
-  }
-  
-  // For simple phone display in worker list
+
   show() {
-    if (this.element) {
-      this.element.innerHTML = `<i class="bi bi-telephone me-1"></i> ${this.phoneValue}`
-    }
+    this.element.innerHTML = `<i class="bi bi-telephone me-1"></i> ${this.phoneValue}`
   }
 
   hide() {
-    if (this.element && !this.element.classList.contains('clicked')) {
-      this.element.innerHTML = `<i class="bi bi-eye me-1"></i> Show Number`
-    }
+    this.element.innerHTML = `<i class="bi bi-eye me-1"></i> Show Number`;
   }
-  
-  call(event) {
-    event.preventDefault();
-    if (this.element) {
-      this.element.classList.add('clicked');
-      window.location.href = `tel:${this.phoneValue}`;
-    }
+
+  call() {
+    window.location.href = `tel:${this.phoneValue}`;
   }
   
   // For worker registration modal

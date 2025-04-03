@@ -1,0 +1,28 @@
+/* custom.css */
+.btn-transparent {
+    background-color: transparent;
+    border: 1px solid #111213;
+    color: #04070a;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-transparent:hover {
+    background-color: rgba(0, 0, 0, 0.763);
+    color: white;
+}
+
+.fixed-size-btn {
+    width: 140px; 
+    height: 31px; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    display: inline-flex;
+    align-items: center; 
+    justify-content: center; 
+    transition: background-color 0.3s ease;
+}
+
+.fixed-size-btn:hover {
+    background-color: black;
+}

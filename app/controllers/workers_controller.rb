@@ -1,6 +1,6 @@
 class WorkersController < ApplicationController
     def index
-      if params[:q].present?
+      if params[:q].present? && params[:q].values.any?(&:present?)
         @q = Worker.ransack(params[:q])
         @workers = @q.result(distinct: true)
       else

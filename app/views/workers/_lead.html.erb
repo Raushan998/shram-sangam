@@ -1,0 +1,30 @@
+<div class="modal fade" id="workerModal" tabindex="-1" aria-labelledby="workerModalLabel" aria-hidden="true" data-controller="worker">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="workerModalLabel">Join Our Workers Network</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div data-worker-target="formContainer">
+            <p class="mb-3">Enter your phone number below and we'll contact you with more information on how to join our workers network.</p>
+            <div class="form-floating mb-3">
+              <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" data-worker-target="phoneInput">
+              <label for="phoneNumber"><i class="bi bi-telephone me-1"></i>Phone Number</label>
+            </div>
+            <button type="button" class="btn btn-transparent w-100" data-action="click->worker#submit">
+              <i class="bi bi-check-circle me-1"></i>Submit
+            </button>
+          </div>
+          <div class="text-center py-4 d-none" data-worker-target="thankYouMessage">
+            <div class="mb-3">
+              <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+            </div>
+            <h4 class="mb-2">Thanks for believing in us!</h4>
+            <p class="mb-4">We've received your information and will contact you soon.</p>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

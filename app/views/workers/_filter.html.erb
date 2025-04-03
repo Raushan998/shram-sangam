@@ -1,0 +1,33 @@
+<div class="card shadow-sm mb-4 rounded-3 overflow-hidden border-0">
+    <div class="collapse show" id="searchCollapse">
+      <div class="card-body p-4 bg-light">
+        <%= search_form_for @q, url: workers_path, method: :get, html: { data: { turbo_frame: 'workers' } } do |f| %>
+          <div class="row g-4">
+            <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="form-floating">
+                <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort.map { |wt| [wt.titleize, wt] }, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
+                <label><i class="bi bi-briefcase me-1"></i>Work Type</label>
+              </div>
+            </div>
+  
+            <div class="col-lg-5 col-md-6 col-sm-12">
+              <div class="form-floating">
+                <%= f.select :city_eq, Worker.pluck(:city).uniq.compact.sort, { include_blank: "All Cities" }, class: "form-select shadow-sm" %>
+                <label><i class="bi bi-building me-1"></i>City</label>
+              </div>
+            </div>
+  
+            <div class="col-lg-2 col-md-12">
+              <div class="d-flex justify-content-end align-items-center h-100">
+                <%= link_to workers_path, class: "btn btn-transparent me-2", data: { turbo_frame: '_top' } do %>
+                  <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                <% end %>
+                <%= f.submit "Search", class: "btn btn-transparent px-4 shadow-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+</div>
+  

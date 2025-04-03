@@ -1,107 +1,15 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3 mb-md-4">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#">
-      shram-sangam
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <div class="ms-auto d-flex">
-        <button class="btn btn-light text-primary fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#workerModal">
-          <i class="bi bi-person-plus-fill me-1"></i>Are you a worker?
-        </button>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<div class="modal fade" id="workerModal" tabindex="-1" aria-labelledby="workerModalLabel" aria-hidden="true" data-controller="worker">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="workerModalLabel">Join Our Workers Network</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div data-worker-target="formContainer">
-          <p class="mb-3">Enter your phone number below and we'll contact you with more information on how to join our workers network.</p>
-          <div class="form-floating mb-3">
-            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" data-worker-target="phoneInput">
-            <label for="phoneNumber"><i class="bi bi-telephone me-1"></i>Phone Number</label>
-          </div>
-          <button type="button" class="btn btn-primary w-100" data-action="click->worker#submit">
-            <i class="bi bi-check-circle me-1"></i>Submit
-          </button>
-        </div>
-        <div class="text-center py-4 d-none" data-worker-target="thankYouMessage">
-          <div class="mb-3">
-            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
-          </div>
-          <h4 class="mb-2">Thanks for believing in us!</h4>
-          <p class="mb-4">We've received your information and will contact you soon.</p>
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<%= render 'layouts/navbar'%>
+<%= render 'lead' %>
 <div class="container-fluid py-4">
-  <div class="card shadow-sm mb-4 rounded-3 overflow-hidden border-0">
-    <div class="card-header bg-primary text-white py-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0 fw-bold">
-          <i class="bi bi-search me-2"></i>Find Workers
-        </h4>
-        <button class="btn btn-sm btn-light rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="true">
-          <i class="bi bi-chevron-up"></i>
-        </button>
-      </div>
-    </div>
-    <div class="collapse show" id="searchCollapse">
-      <div class="card-body p-4 bg-light">
-        <%= search_form_for @q, url: workers_path, method: :get, html: { data: { turbo_frame: 'workers' } } do |f| %>
-          <div class="row g-4">
-            <div class="col-lg-5 col-md-6 col-sm-12">
-              <div class="form-floating">
-                <%= f.select :work_type_eq, Worker.pluck(:work_type).uniq.compact.sort.map {|wt| [wt.titleize, wt]}, { include_blank: "All Types" }, class: "form-select shadow-sm" %>
-                <label><i class="bi bi-briefcase me-1"></i>Work Type</label>
-              </div>
-            </div>
-  
-            <div class="col-lg-5 col-md-6 col-sm-12">
-              <div class="form-floating">
-                <%= f.select :city_eq, Worker.pluck(:city).uniq.compact.sort, 
-                   { include_blank: "All Cities" }, 
-                   class: "form-select shadow-sm" %>
-                <label><i class="bi bi-building me-1"></i>City</label>
-              </div>
-            </div>
-            
-            <div class="col-lg-2 col-md-12 d-flex align-items-center justify-content-end mt-md-4 mt-lg-0">
-              <%= link_to workers_path, 
-                  class: "btn btn-outline-secondary me-2", 
-                  data: { turbo_frame: '_top' } do %>
-                <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-              <% end %>
-              <%= f.submit "Search", class: "btn btn-primary px-4 shadow-sm" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Enhanced Results Card using Bootstrap classes -->
+  <%= render 'filter' %>
   <turbo-frame id="workers">
     <div class="card shadow rounded-3 border-0">
-      <div class="card-header bg-primary text-white py-3">
+      <div class="card-header bg-dark-subtle text-black py-3">
         <div class="d-flex justify-content-between align-items-center">
           <h4 class="mb-0 fw-bold">
             <i class="bi bi-people me-2"></i>Workers Directory
           </h4>
-          <span class="badge bg-light text-primary fs-6 fw-semibold px-3 shadow-sm">
+          <span class="badge bg-light text-black fs-6 fw-semibold px-3 shadow-sm">
             <%= @workers.count %> workers found
           </span>
         </div>
@@ -118,7 +26,7 @@
               Try adjusting your filters or exploring other options
             </p>
             <%= link_to "View All Workers", workers_path, 
-                class: "btn btn-primary px-4 py-2", 
+                class: "btn btn-transparent px-4 py-2", 
                 data: { turbo_frame: '_top' } %>
           </div>
         </div>
@@ -150,7 +58,7 @@
                   <tr>
                     <td class="ps-4">
                       <div class="d-flex align-items-center">
-                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                        <div class="bg-secondary bg-gradien text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-size: 1rem;">
                           <%= worker.name&.first&.upcase %>
                         </div>
                         <div class="fw-semibold">
@@ -195,7 +103,7 @@
                     </td>
                     <td>
                       <div class="d-flex align-items-start">
-                        <i class="bi bi-geo-alt text-primary me-2 mt-1"></i>
+                        <i class="bi bi-geo-alt text-dark me-2 mt-1"></i>
                         <div>
                           <div class="fw-medium">
                             <%= worker.city.presence || "N/A" %><%= ", #{worker.state}" if worker.state.present? %>
@@ -214,14 +122,12 @@
                     <td class="pe-4">
                       <div class="d-flex flex-column">
                         <% if worker.phone_number.present? %>
-                          <!-- Fixed-width button that won't cause layout shifts -->
-                          <button data-controller="worker"
-                                  data-worker-phone-value="<%= worker.phone_number %>"
-                                  data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
-                                  class="btn btn-outline-primary btn-sm mb-2 text-start" 
-                                  style="min-width: 140px; height: 31px; overflow: hidden; white-space: nowrap;">
-                            <i class="bi bi-eye me-1"></i> Show Number
-                          </button>
+                        <button data-controller="worker"
+                                data-worker-phone-value="<%= worker.phone_number %>"
+                                data-action="mouseover->worker#show mouseleave->worker#hide click->worker#call"
+                                class="btn btn-outline-dark btn-sm mb-2 text-start fixed-size-btn">
+                            <i class="bi bi-eye me-1"></i> <span class="button-text">Show Number</span>
+                        </button>
                         <% else %>
                           <div class="text-muted small mb-2 py-1 px-2" style="min-height: 31px;">
                             <i class="bi bi-telephone-x me-1"></i> No phone available
