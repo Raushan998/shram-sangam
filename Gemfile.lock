@@ -116,10 +116,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    dockerfile-rails (1.7.9)
-      rails (>= 3.0.0)
     drb (2.2.1)
     erubi (1.13.1)
+    faker (3.5.2)
+      i18n (>= 1.8.11, < 2)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-aarch64-linux-musl)
     ffi (1.17.1-arm-linux-gnu)
@@ -375,7 +375,7 @@ DEPENDENCIES
   cssbundling-rails (~> 1.4)
   debug
   devise
-  dockerfile-rails (>= 1.7)
+  faker
   importmap-rails
   jbuilder
   pagy

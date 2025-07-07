@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_03_124926) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_06_142215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_124926) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "city"
+    t.string "landmark"
+    t.string "street"
+    t.string "state"
+    t.string "country"
+    t.string "postal_code"
+    t.string "addressable_type", null: false
+    t.bigint "addressable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable"
+    t.index ["country", "city"], name: "index_addresses_on_country_and_city"
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -67,6 +82,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_124926) do
     t.text "message"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "phone_number"
+    t.string "country_code", default: "+91"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "workers", force: :cascade do |t|
     t.string "name"
     t.string "phone_number"
@@ -88,5 +112,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_124926) do
     t.index ["pincode"], name: "index_workers_on_pincode"
     t.index ["state"], name: "index_workers_on_state"
     t.index ["work_type"], name: "index_workers_on_work_type"
+  end
+
+  create_table "works", force: :cascade do |t|
+    t.text "title"
+    t.text "description"
+    t.integer "budget_type"
+    t.float "budget_amount"
+    t.integer "work_type"
+    t.integer "category"
+    t.integer "post_visibility"
+    t.integer "required_workers"
+    t.string "contact_person_name"
+    t.string "contact_person_phone_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

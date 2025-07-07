@@ -16,4 +16,5 @@ Rails.application.routes.draw do
   # root "posts#index"
   resources :workers, only: [:index]
   resources :leads, only: [:create]
+  resources :works, only: [:index, :new, :create, :show]
 end

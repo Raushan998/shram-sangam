@@ -1,17 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="<%= root_path %>">
-            ShramSangam
-        </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <div class="ms-auto d-flex">
-          <button class="btn btn-light text-dark fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#workerModal">
-            <i class="bi bi-person-plus-fill me-1"></i>Are you a worker?
-          </button>
-        </div>
+  <div class="container-fluid">
+    <%= link_to root_path, class: "navbar-brand fw-bold" do %>
+      ShramSangam
+    <% end %>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <div class="ms-auto d-flex">
+        <%= link_to new_work_path, class: "btn btn-light text-dark fw-bold me-2" do %>
+          Post Work
+        <% end %>
+        <%= link_to works_path, class: "btn btn-light text-dark fw-bold me-2" do %>
+          Show All Works
+        <% end %>
+
+        <button
+          class="btn btn-light text-dark fw-bold"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#workerModal"
+        >
+          <i class="bi bi-person-plus-fill me-1"></i> Are you a worker?
+        </button>
       </div>
     </div>
+  </div>
 </nav>
