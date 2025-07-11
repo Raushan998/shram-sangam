@@ -46,7 +46,7 @@ export default class extends Controller {
       if (response.ok) {
         this.formContainerTarget.classList.add("d-none");
         this.thankYouMessageTarget.classList.remove("d-none");
-        this.element.reset();
+        this.phoneInputTarget.value = "";
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.error}`);
