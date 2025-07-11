@@ -7,7 +7,9 @@
     <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <% end %>
-<%= form_with(model: work, local: true, html: { class: "needs-validation", novalidate: true }) do |f| %>
+
+<%= form_with(model: work, local: true, data: { turbo: false }, html: { class: "needs-validation", novalidate: true }) do |f| %>
+  <!-- Basic Fields -->
   <div class="mb-3">
     <%= f.label :title, class: "form-label" %>
     <%= f.text_field :title, class: "form-control", required: true %>
@@ -18,24 +20,23 @@
     <%= f.text_area :description, class: "form-control", rows: 4 %>
   </div>
 
+  <!-- Work Type and Category -->
   <div class="row mb-3">
     <div class="col-md-6">
       <%= f.label :work_type, class: "form-label" %>
-      <%= f.select :work_type, Work.work_types.keys.map { |k| [k.humanize, k] }, 
-                   { prompt: "Select type" }, class: "form-select", required: true %>
+      <%= f.select :work_type, Work.work_types.keys.map { |k| [k.humanize, k] }, { prompt: "Select type" }, class: "form-select", required: true %>
     </div>
     <div class="col-md-6">
       <%= f.label :category, class: "form-label" %>
-      <%= f.select :category, Work.categories.keys.map { |k| [k.humanize, k] }, 
-                   { prompt: "Select category" }, class: "form-select" %>
+      <%= f.select :category, Work.categories.keys.map { |k| [k.humanize, k] }, { prompt: "Select category" }, class: "form-select" %>
     </div>
   </div>
 
+  <!-- Budget Fields -->
   <div class="row mb-3">
     <div class="col-md-4">
       <%= f.label :budget_type, class: "form-label" %>
-      <%= f.select :budget_type, Work.budget_types.keys.map { |k| [k.humanize, k] }, 
-                   { prompt: "Budget type" }, class: "form-select", required: true %>
+      <%= f.select :budget_type, Work.budget_types.keys.map { |k| [k.humanize, k] }, { prompt: "Budget type" }, class: "form-select", required: true %>
     </div>
     <div class="col-md-4">
       <%= f.label :budget_amount, class: "form-label" %>
@@ -47,17 +48,21 @@
     </div>
   </div>
 
+  <!-- Contact Info -->
   <div class="row">
     <div class="col-md-4">
       <%= f.label :contact_person_name, class: "form-label" %>
-      <%= f.text_field :contact_person_name, class: "form-control",  required: true%>
+      <%= f.text_field :contact_person_name, class: "form-control", required: true %>
     </div>
     <div class="col-md-4">
       <%= f.label :contact_person_phone_number, class: "form-label" %>
-      <%= f.text_field :contact_person_phone_number, class: "form-control" , required: true%>
+      <%= f.text_field :contact_person_phone_number, class: "form-control", required: true %>
     </div>
   </div>
+
   <br>
+
+  <!-- Post Visibility -->
   <div class="mb-3">
     <span class="form-label d-block">Post Visibility</span>
     <% Work.post_visibilities.keys.each do |vis| %>
@@ -68,24 +73,23 @@
     <% end %>
   </div>
 
-  <div class="mb-4">
+  <!-- Addresses Section -->
+  <div class="mb-4" data-controller="address">
     <h5 class="form-label">Addresses</h5>
-    <div id="addresses-container">
+
+    <div id="addresses-container" data-address-target="container">
       <%= f.fields_for :addresses do |address_form| %>
         <div class="address-form border p-3 mb-3 rounded">
+          <%= address_form.hidden_field :_destroy %>
           <div class="row">
             <div class="col-md-12 mb-3">
               <%= address_form.label :street, class: "form-label" %>
               <%= address_form.text_field :street, class: "form-control", placeholder: "Street address" %>
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-12 mb-3">
               <%= address_form.label :landmark, class: "form-label" %>
-              <%= address_form.text_field :landmark, class: "form-control", placeholder: "LandMark" %>
+              <%= address_form.text_field :landmark, class: "form-control", placeholder: "Landmark" %>
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-4 mb-3">
               <%= address_form.label :city, class: "form-label" %>
               <%= address_form.text_field :city, class: "form-control", placeholder: "City" %>
@@ -98,88 +102,20 @@
               <%= address_form.label :postal_code, class: "form-label" %>
               <%= address_form.text_field :postal_code, class: "form-control", placeholder: "Postal Code" %>
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-8 mb-3">
               <%= address_form.label :country, class: "form-label" %>
               <%= address_form.text_field :country, class: "form-control", placeholder: "Country" %>
             </div>
             <div class="col-md-4 mb-3 d-flex align-items-end">
-              <%= address_form.check_box :_destroy, class: "form-check-input" %>
-              <%= address_form.label :_destroy, "Remove", class: "form-check-label ms-2" %>
+              <button type="button" class="btn btn-sm btn-outline-danger" data-action="address#remove">Remove</button>
             </div>
           </div>
         </div>
       <% end %>
     </div>
-    
-    <button type="button" class="btn btn-outline-secondary" id="add-address">
-      Add Another Address
-    </button>
+
+    <button type="button" class="btn btn-outline-secondary" data-action="address#add">Add Another Address</button>
   </div>
 
-  <%= f.submit class: "btn btn-primary" %>
+  <%= f.submit "Submit", class: "btn btn-primary" %>
 <% end %>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const addAddressBtn = document.getElementById('add-address');
-  const addressesContainer = document.getElementById('addresses-container');
-  
-  if (addAddressBtn) {
-    addAddressBtn.addEventListener('click', function() {
-      const timestamp = new Date().getTime();
-      const newAddressForm = `
-        <div class="address-form border p-3 mb-3 rounded">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <label class="form-label" for="work_addresses_attributes_${timestamp}_street">Street</label>
-              <input class="form-control" placeholder="Street address" type="text" name="work[addresses_attributes][${timestamp}][street]" id="work_addresses_attributes_${timestamp}_street">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label class="form-label" for="work_addresses_attributes_${timestamp}_city">City</label>
-              <input class="form-control" placeholder="City" type="text" name="work[addresses_attributes][${timestamp}][city]" id="work_addresses_attributes_${timestamp}_city">
-            </div>
-            <div class="col-md-4 mb-3">
-              <label class="form-label" for="work_addresses_attributes_${timestamp}_state">State</label>
-              <input class="form-control" placeholder="State" type="text" name="work[addresses_attributes][${timestamp}][state]" id="work_addresses_attributes_${timestamp}_state">
-            </div>
-            <div class="col-md-4 mb-3">
-              <label class="form-label" for="work_addresses_attributes_${timestamp}_zip_code">Zip code</label>
-              <input class="form-control" placeholder="ZIP Code" type="text" name="work[addresses_attributes][${timestamp}][zip_code]" id="work_addresses_attributes_${timestamp}_zip_code">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8 mb-3">
-              <label class="form-label" for="work_addresses_attributes_${timestamp}_country">Country</label>
-              <input class="form-control" placeholder="Country" type="text" name="work[addresses_attributes][${timestamp}][country]" id="work_addresses_attributes_${timestamp}_country">
-            </div>
-            <div class="col-md-4 mb-3 d-flex align-items-end">
-              <button type="button" class="btn btn-sm btn-outline-danger remove-address">Remove</button>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      addressesContainer.insertAdjacentHTML('beforeend', newAddressForm);
-      
-      // Add event listener to the new remove button
-      const newRemoveBtn = addressesContainer.lastElementChild.querySelector('.remove-address');
-      if (newRemoveBtn) {
-        newRemoveBtn.addEventListener('click', function() {
-          this.closest('.address-form').remove();
-        });
-      }
-    });
-  }
-  
-  // Add event listeners to existing remove buttons
-  document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('remove-address')) {
-      e.target.closest('.address-form').remove();
-    }
-  });
-});
-</script>

@@ -16,23 +16,14 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarContent">
-      <div class="ms-auto d-flex">
-        <%= link_to new_work_path, class: "btn btn-light text-dark fw-bold me-2" do %>
-          Post Work
-        <% end %>
-        <%= link_to works_path, class: "btn btn-light text-dark fw-bold me-2" do %>
-          Show All Works
-        <% end %>
-
-        <button
-          class="btn btn-light text-dark fw-bold"
-          type="button"
-          data-bs-toggle="modal"
-          data-bs-target="#workerModal"
-        >
-          <i class="bi bi-person-plus-fill me-1"></i> Are you a worker?
-        </button>
-      </div>
-    </div>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item mb-1 mb-lg-0">
+          <%= link_to "Post Work", new_work_path, class: "nav-link fw-bold me-2" %>
+        </li>
+        <li class="nav-item mb-1 mb-lg-0">
+          <%= link_to "Show All Works", works_path, class: "nav-link fw-bold me-2" %>
+        </li>
+      </ul>
+    </div>    
   </div>
 </nav>

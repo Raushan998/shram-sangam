@@ -1,5 +1,15 @@
 class Work < ApplicationRecord
-    validates :contact_person_name, :contact_person_phone_number, presence: true
+    with_options presence: true do
+        validates :contact_person_name
+        validates :contact_person_phone_number
+        validates :title
+        validates :category
+        validates :work_type
+        validates :budget_type
+        validates :post_visibility
+      end
+      
+    validates :budget_amount, numericality: { greater_than: 0 }      
     has_many :addresses, as: :addressable, dependent: :destroy
     accepts_nested_attributes_for :addresses, allow_destroy: true, reject_if: :all_blank
     enum :budget_type, {
